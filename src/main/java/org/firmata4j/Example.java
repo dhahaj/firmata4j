@@ -45,8 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import jssc.SerialNativeInterface;
-import jssc.SerialPortList;
+import com.fazecast.jSerialComm.SerialPort;
 import org.firmata4j.ui.JPinboard;
 
 /**
@@ -56,123 +55,132 @@ import org.firmata4j.ui.JPinboard;
  */
 public class Example {
 
-    private static final JFrame INITIALIZATION_FRAME = new JFrame();
+	private static final JFrame INITIALIZATION_FRAME = new JFrame();
 
-    public static void main(String[] args) throws IOException {
-        try { // set look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
-        }
-        // requesting a user to define the port name
-        String port = requestPort();
-        final IODevice device = new FirmataDevice(port);
-        showInitializationMessage();
-        device.start();
-        try {
-            device.ensureInitializationIsDone();
-        } catch (InterruptedException e) {
-            JOptionPane.showMessageDialog(INITIALIZATION_FRAME, e.getMessage(), "Connection error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-        hideInitializationWindow();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame mainFrame = new JFrame("Pinboard Example");
-                GridBagLayout layout = new GridBagLayout();
-                GridBagConstraints constraints = new GridBagConstraints();
-                mainFrame.setLayout(layout);
-                constraints.gridy = 0;
-                constraints.fill = GridBagConstraints.BOTH;
-                constraints.weightx = 1;
-                constraints.weighty = 1;
-                JPinboard pinboard = new JPinboard(device);
-                layout.setConstraints(pinboard, constraints);
-                mainFrame.add(pinboard);
-                mainFrame.pack();
-                mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                mainFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        try {
-                            device.stop();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                        super.windowClosing(e);
-                    }
-                });
-                mainFrame.setVisible(true);
-            }
-        });
-    }
+	public static void main(String[] args) throws IOException {
+		try { // set look and feel
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException ex) {
+			Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
+		}
 
-    @SuppressWarnings("unchecked")
-    private static String requestPort() {
-        JComboBox<String> portNameSelector = new JComboBox<>();
-        portNameSelector.setModel(new DefaultComboBoxModel<String>());
-        String[] portNames;
-        if (SerialNativeInterface.getOsType() == SerialNativeInterface.OS_MAC_OS_X) {
-            // for MAC OS default pattern of jssc library is too restrictive
-            portNames = SerialPortList.getPortNames("/dev/", Pattern.compile("tty\\..*"));
-        } else {
-            portNames = SerialPortList.getPortNames();
-        }
-        for (String portName : portNames) {
-            portNameSelector.addItem(portName);
-        }
-        if (portNameSelector.getItemCount() == 0) {
-            JOptionPane.showMessageDialog(null, "Cannot find any serial port", "Error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.add(new JLabel("Port "));
-        panel.add(portNameSelector);
-        if (JOptionPane.showConfirmDialog(null, panel, "Select the port", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-            return portNameSelector.getSelectedItem().toString();
-        } else {
-            System.exit(0);
-        }
-        return "";
-    }
+		// requesting a user to define the port name
+		String port = requestPort();
 
-    private static void showInitializationMessage() {
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    JFrame frame = INITIALIZATION_FRAME;
-                    frame.setUndecorated(true);
-                    JLabel label = new JLabel("Connecting to device");
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                    frame.add(label);
-                    frame.pack();
-                    frame.setSize(frame.getWidth() + 40, frame.getHeight() + 40);
-                    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-                    int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
-                    int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
-                    frame.setLocation(x, y);
-                    frame.setVisible(true);
-                }
-            });
-        } catch (InterruptedException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+		final IODevice device = new FirmataDevice(port);
 
-    private static void hideInitializationWindow() {
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    INITIALIZATION_FRAME.setVisible(false);
-                    INITIALIZATION_FRAME.dispose();
-                }
-            });
-        } catch (InterruptedException | InvocationTargetException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+		showInitializationMessage();
+
+		device.start();
+
+		try {
+			device.ensureInitializationIsDone();
+		} catch (InterruptedException e) {
+			JOptionPane.showMessageDialog(INITIALIZATION_FRAME, e.getMessage(), "Connection error",
+					JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
+
+		hideInitializationWindow();
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				JFrame mainFrame = new JFrame("Pinboard Example");
+				GridBagLayout layout = new GridBagLayout();
+				GridBagConstraints constraints = new GridBagConstraints();
+				mainFrame.setLayout(layout);
+				constraints.gridy = 0;
+				constraints.fill = GridBagConstraints.BOTH;
+				constraints.weightx = 1;
+				constraints.weighty = 1;
+				JPinboard pinboard = new JPinboard(device);
+				layout.setConstraints(pinboard, constraints);
+				mainFrame.add(pinboard);
+				mainFrame.pack();
+				mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				mainFrame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						try {
+							device.stop();
+						} catch (IOException ex) {
+							throw new RuntimeException(ex);
+						}
+						super.windowClosing(e);
+					}
+				});
+				mainFrame.setVisible(true);
+			}
+		});
+	}
+
+	private static String requestPort() {
+
+		JComboBox<String> portNameSelector = new JComboBox<>();
+		portNameSelector.setModel(new DefaultComboBoxModel<String>());
+
+		for (SerialPort portName : SerialPort.getCommPorts()) {
+			String name = portName.getSystemPortName();
+			portNameSelector.addItem(name);
+		}
+
+		if (portNameSelector.getItemCount() == 0) {
+			JOptionPane.showMessageDialog(null, "Cannot find any serial port", "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		panel.add(new JLabel("Port "));
+		panel.add(portNameSelector);
+
+		if (JOptionPane.showConfirmDialog(null, panel, "Select the port",
+				JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+			return portNameSelector.getSelectedItem().toString();
+		} else {
+			System.exit(0);
+		}
+		return "";
+	}
+
+	private static void showInitializationMessage() {
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					JFrame frame = INITIALIZATION_FRAME;
+					frame.setUndecorated(true);
+					JLabel label = new JLabel("Connecting to device");
+					label.setHorizontalAlignment(JLabel.CENTER);
+					frame.add(label);
+					frame.pack();
+					frame.setSize(frame.getWidth() + 40, frame.getHeight() + 40);
+					Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+					int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+					int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+					frame.setLocation(x, y);
+					frame.setVisible(true);
+				}
+			});
+		} catch (InterruptedException | InvocationTargetException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	private static void hideInitializationWindow() {
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					INITIALIZATION_FRAME.setVisible(false);
+					INITIALIZATION_FRAME.dispose();
+				}
+			});
+		} catch (InterruptedException | InvocationTargetException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 }

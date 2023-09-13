@@ -25,6 +25,9 @@ package org.firmata4j.transport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fazecast.jSerialComm.SerialPort;
+
 import java.io.IOException;
 import org.firmata4j.Parser;
 
@@ -51,47 +54,59 @@ import org.firmata4j.Parser;
  */
 public class SerialTransport implements TransportInterface {
 
-    private TransportInterface delegate;
+	private TransportInterface delegate;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SerialTransport.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SerialTransport.class);
 
-    public SerialTransport(String portName) {
-        try {
-            Class.forName("com.fazecast.jSerialComm.SerialPort", false, this.getClass().getClassLoader());
-            delegate = new JSerialCommTransport(portName);
-            LOGGER.debug("Using jSerialComm transport");
-        } catch (ClassNotFoundException e) {
-            try {
-                Class.forName("jssc.SerialPort", false, this.getClass().getClassLoader());
-                delegate = new JSerialCommTransport(portName);
-                LOGGER.debug("Using jssc transport");
-            } catch (ClassNotFoundException ex) {
-                throw new IllegalStateException(
-                        "Serial communication library is not found in the classpath. "
-                        + "Please make sure that there is at least one dependency "
-                        + "as described in the javadoc of org.firmata4j.transport.SerialTransport");
-            }
-        }
-    }
+	/**
+	 * 
+	 * @param portName
+	 */
+	public SerialTransport(String portName) {
+		try {
+			Class.forName("com.fazecast.jSerialComm.SerialPort", false, this.getClass().getClassLoader());
+			delegate = new JSerialCommTransport(portName);
+			LOGGER.debug("Using jSerialComm transport");
+		} catch (ClassNotFoundException e) {
+			try {
+				Class.forName("jssc.SerialPort", false, this.getClass().getClassLoader());
+				delegate = new JSerialCommTransport(portName);
+				LOGGER.debug("Using jssc transport");
+			} catch (ClassNotFoundException ex) {
+				throw new IllegalStateException("Serial communication library is not found in the classpath. "
+						+ "Please make sure that there is at least one dependency "
+						+ "as described in the javadoc of org.firmata4j.transport.SerialTransport");
+			}
+		}
+	}
 
-    @Override
-    public void start() throws IOException {
-        delegate.start();
-    }
+	/**
+	 * Constructor for explicitly using JSerialComm.
+	 * 
+	 * @param serialPort
+	 */
+	public SerialTransport(SerialPort serialPort) {
+		delegate = new JSerialCommTransport(serialPort.getSystemPortName());
+	}
 
-    @Override
-    public void stop() throws IOException {
-        delegate.stop();
-    }
+	@Override
+	public void start() throws IOException {
+		delegate.start();
+	}
 
-    @Override
-    public void write(byte[] bytes) throws IOException {
-        delegate.write(bytes);
-    }
+	@Override
+	public void stop() throws IOException {
+		delegate.stop();
+	}
 
-    @Override
-    public void setParser(Parser parser) {
-        delegate.setParser(parser);
-    }
+	@Override
+	public void write(byte[] bytes) throws IOException {
+		delegate.write(bytes);
+	}
+
+	@Override
+	public void setParser(Parser parser) {
+		delegate.setParser(parser);
+	}
 
 }

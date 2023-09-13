@@ -34,24 +34,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DaemonThreadFactory implements ThreadFactory {
 
-    private final AtomicInteger counter = new AtomicInteger();
-    
-    private final String namePrefix;
+	private final AtomicInteger counter = new AtomicInteger();
 
-    /**
-     * Creates thread factory that spawns threads with specified name prefix.
-     *
-     * @param namePrefix prefix of thread's names
-     */
-    public DaemonThreadFactory(String namePrefix) {
-        this.namePrefix = namePrefix;
-    }
-    
-    @Override
-    public Thread newThread(Runnable r) {
-        Thread result = new Thread(r, String.format("%s-%d", namePrefix, counter.incrementAndGet()));
-        result.setDaemon(true);
-        return result;
-    }
-    
+	private final String namePrefix;
+
+	/**
+	 * Creates thread factory that spawns threads with specified name prefix.
+	 *
+	 * @param namePrefix prefix of thread's names
+	 */
+	public DaemonThreadFactory(String namePrefix) {
+		this.namePrefix = namePrefix;
+	}
+
+	@Override
+	public Thread newThread(Runnable r) {
+		Thread result = new Thread(r, String.format("%s-%d", namePrefix, counter.incrementAndGet()));
+		result.setDaemon(true);
+		return result;
+	}
+
 }

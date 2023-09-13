@@ -39,26 +39,26 @@ import org.slf4j.LoggerFactory;
  */
 public class JPinboard extends JPanel {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPinboard.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JPinboard.class);
 
-    public JPinboard(IODevice model) {
-        GridBagLayout layout = new GridBagLayout();
+	public JPinboard(IODevice model) {
+		GridBagLayout layout = new GridBagLayout();
 
-        setLayout(layout);
-        for (int i = 0; i < model.getPinsCount(); i++) {
-            JPin pin = new JPin(model.getPin(i));
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.gridy = 0;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.weightx = 1;
-            layout.setConstraints(pin, constraints);
-            add(pin);
-            constraints = new GridBagConstraints();
-            constraints.gridy = 1;
-            JLabel label = new JLabel(String.valueOf(i));
-            layout.setConstraints(label, constraints);
-            add(label);
-        }
-    }
-    
+		setLayout(layout);
+		for (int i = 0; i < model.getPinsCount(); i++) {
+			JPin pin = new JPin(model.getPin(i));
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.gridy = 0;
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.weightx = 1;
+			layout.setConstraints(pin, constraints);
+			add(pin);
+			constraints = new GridBagConstraints();
+			constraints.gridy = 1;
+			JLabel label = new JLabel(String.valueOf(i));
+			layout.setConstraints(label, constraints);
+			add(label);
+		}
+	}
+
 }

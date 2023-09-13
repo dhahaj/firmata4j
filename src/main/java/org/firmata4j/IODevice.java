@@ -37,130 +37,128 @@ import org.firmata4j.fsm.Event;
  */
 public interface IODevice {
 
-    /**
-     * Initiates communication with hardware.<br>
-     * This method initialize the {@link IODevice} instance. Initialization may
-     * take some time depending on speed of communication to hardware.<br>
-     * To check whether the device is ready, use {@link #isReady()}.<br>
-     * If you want to wait until the device is initializing and continue working
-     * with it, use {@link #ensureInitializationIsDone()}.<br>
-     * If you develop application in asynchronous style, you may want to
-     * register an event listener that will receive a message when the device is
-     * ready.
-     *
-     * @throws IOException when communication cannot be established
-     * @see IODeviceEventListener#onStart(org.firmata4j.IOEvent)
-     */
-    void start() throws IOException;
+	/**
+	 * Initiates communication with hardware.<br>
+	 * This method initialize the {@link IODevice} instance. Initialization may take
+	 * some time depending on speed of communication to hardware.<br>
+	 * To check whether the device is ready, use {@link #isReady()}.<br>
+	 * If you want to wait until the device is initializing and continue working
+	 * with it, use {@link #ensureInitializationIsDone()}.<br>
+	 * If you develop application in asynchronous style, you may want to register an
+	 * event listener that will receive a message when the device is ready.
+	 *
+	 * @throws IOException when communication cannot be established
+	 * @see IODeviceEventListener#onStart(org.firmata4j.IOEvent)
+	 */
+	void start() throws IOException;
 
-    /**
-     * Terminates communication with hardware.<br/>
-     * When communication is terminated, an event is published to
-     * {@link IODeviceEventListener}s.
-     *
-     * @throws IOException when communication cannot be properly terminated
-     * @see IODeviceEventListener#onStop(org.firmata4j.IOEvent)
-     */
-    void stop() throws IOException;
+	/**
+	 * Terminates communication with hardware.<br/>
+	 * When communication is terminated, an event is published to
+	 * {@link IODeviceEventListener}s.
+	 *
+	 * @throws IOException when communication cannot be properly terminated
+	 * @see IODeviceEventListener#onStop(org.firmata4j.IOEvent)
+	 */
+	void stop() throws IOException;
 
-    /**
-     * Waits for initialization is done.<br/>
-     * Use this method if you want to be sure that device is ready to
-     * communicate.
-     *
-     * @throws InterruptedException when the device cannot be started or waiting
-     * for initialization is interrupted or connection has not been established
-     * during timeout.
-     */
-    void ensureInitializationIsDone() throws InterruptedException;
+	/**
+	 * Waits for initialization is done.<br/>
+	 * Use this method if you want to be sure that device is ready to communicate.
+	 *
+	 * @throws InterruptedException when the device cannot be started or waiting for
+	 *                              initialization is interrupted or connection has
+	 *                              not been established during timeout.
+	 */
+	void ensureInitializationIsDone() throws InterruptedException;
 
-    /**
-     * Checks whether the device is fully initialized and ready to use.
-     *
-     * @return true if device is ready, false otherwise
-     */
-    boolean isReady();
+	/**
+	 * Checks whether the device is fully initialized and ready to use.
+	 *
+	 * @return true if device is ready, false otherwise
+	 */
+	boolean isReady();
 
-    /**
-     * Returns a set of pins of the device.
-     *
-     * @return set of device's pins
-     * @see Pin
-     */
-    Set<Pin> getPins();
+	/**
+	 * Returns a set of pins of the device.
+	 *
+	 * @return set of device's pins
+	 * @see Pin
+	 */
+	Set<Pin> getPins();
 
-    /**
-     * Returns count of pins of the device.
-     *
-     * @return count of pins
-     */
-    int getPinsCount();
+	/**
+	 * Returns count of pins of the device.
+	 *
+	 * @return count of pins
+	 */
+	int getPinsCount();
 
-    /**
-     * Returns a pin by its index on device. The index should be less than
-     * result returned by {@link #getPinsCount()}.
-     *
-     * @param index index of the pin
-     * @return the pin
-     */
-    Pin getPin(int index);
-    
-    /**
-     * Returns I2C device by its address.
-     * 
-     * @param address
-     * @return I2C device
-     * @throws IOException when communication to the IO device failed
-     */
-    I2CDevice getI2CDevice(byte address) throws IOException;
+	/**
+	 * Returns a pin by its index on device. The index should be less than result
+	 * returned by {@link #getPinsCount()}.
+	 *
+	 * @param index index of the pin
+	 * @return the pin
+	 */
+	Pin getPin(int index);
 
-    /**
-     * Adds the specified listener to receive events from this device.
-     *
-     * @param listener the listener
-     */
-    void addEventListener(IODeviceEventListener listener);
+	/**
+	 * Returns I2C device by its address.
+	 * 
+	 * @param address
+	 * @return I2C device
+	 * @throws IOException when communication to the IO device failed
+	 */
+	I2CDevice getI2CDevice(byte address) throws IOException;
 
-    /**
-     * Removes the specified listener so that it no longer receives events from
-     * this device.
-     *
-     * @param listener the listener
-     */
-    void removeEventListener(IODeviceEventListener listener);
+	/**
+	 * Adds the specified listener to receive events from this device.
+	 *
+	 * @param listener the listener
+	 */
+	void addEventListener(IODeviceEventListener listener);
 
-    /**
-     * Returns the name of a protocol that the device uses.
-     *
-     * @return the name of a protocol
-     */
-    String getProtocol();
-    
-    /**
-     * Adds handler for low-level events of specified type.
-     *
-     * "*" is a special type that matches to any message. The handlers registed
-     * for that type will receive an even after the hadlers of specific type.
-     *
-     * @param messageType type of low-level event
-     * @param handler handler of the event
-     */
-    void addProtocolMessageHandler(String messageType, Consumer<Event> handler);
-    
-    /**
-     * Sends text message to device.
-     * 
-     * @param message the message
-     * @throws IOException when sending a message fails
-     */
-    void sendMessage(String message) throws IOException;
-    
-    /**
-     * Sends binary message to device.
-     *
-     * @param msg message
-     * @throws IOException when sending the message fails
-     */
-    void sendMessage(byte... msg) throws IOException;
+	/**
+	 * Removes the specified listener so that it no longer receives events from this
+	 * device.
+	 *
+	 * @param listener the listener
+	 */
+	void removeEventListener(IODeviceEventListener listener);
+
+	/**
+	 * Returns the name of a protocol that the device uses.
+	 *
+	 * @return the name of a protocol
+	 */
+	String getProtocol();
+
+	/**
+	 * Adds handler for low-level events of specified type.
+	 *
+	 * "*" is a special type that matches to any message. The handlers registed for
+	 * that type will receive an even after the hadlers of specific type.
+	 *
+	 * @param messageType type of low-level event
+	 * @param handler     handler of the event
+	 */
+	void addProtocolMessageHandler(String messageType, Consumer<Event> handler);
+
+	/**
+	 * Sends text message to device.
+	 * 
+	 * @param message the message
+	 * @throws IOException when sending a message fails
+	 */
+	void sendMessage(String message) throws IOException;
+
+	/**
+	 * Sends binary message to device.
+	 *
+	 * @param msg message
+	 * @throws IOException when sending the message fails
+	 */
+	void sendMessage(byte... msg) throws IOException;
 
 }

@@ -33,32 +33,32 @@ import org.firmata4j.Parser;
  */
 public interface TransportInterface {
 
-    /**
-     * Starts the transport and initializes the connector.
-     *
-     * @throws java.io.IOException
-     */
-    void start() throws IOException;
+	/**
+	 * Starts the transport and initializes the connector.
+	 *
+	 * @throws java.io.IOException
+	 */
+	void start() throws IOException;
 
-    /**
-     * Shuts down the connector and stops the transport.
-     *
-     * @throws java.io.IOException
-     */
-    void stop() throws IOException;
+	/**
+	 * Shuts down the connector and stops the transport.
+	 *
+	 * @throws java.io.IOException
+	 */
+	void stop() throws IOException;
 
-    /**
-     * Sends data to the device.
-     *
-     * @param bytes data to send
-     * @throws java.io.IOException
-     */
-    void write(byte[] bytes) throws IOException;
+	/**
+	 * Sends data to the device.
+	 *
+	 * @param bytes data to send
+	 * @throws java.io.IOException
+	 */
+	void write(byte[] bytes) throws IOException;
 
-    /**
-     * Sets the parser. Transport transmits received data to the parser.
-     *
-     * @param parser data parser
-     */
-    void setParser(Parser parser);
+	/**
+	 * Sets the parser. Transport transmits received data to the parser.
+	 *
+	 * @param parser data parser
+	 */
+	void setParser(Parser parser);
 }

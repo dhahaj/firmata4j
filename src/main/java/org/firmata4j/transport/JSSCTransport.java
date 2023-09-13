@@ -38,69 +38,67 @@ import org.slf4j.LoggerFactory;
  * @author Ali Kia
  */
 public class JSSCTransport implements TransportInterface, SerialPortEventListener {
-    private Parser parser;
+	private Parser parser;
 
-    private final SerialPort port;
+	private final SerialPort port;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JSSCTransport.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JSSCTransport.class);
 
-    public JSSCTransport(String portName) {
-        this.port = new SerialPort(portName);
-    }
+	public JSSCTransport(String portName) throws Exception {
+		this.port = new SerialPort(portName);
+		throw new Exception("using jssc!");
+	}
 
-    @Override
-    public void start() throws IOException {
-        if (!port.isOpened()) {
-            try {
-                port.openPort();
-                port.setParams(
-                        SerialPort.BAUDRATE_57600,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
-                port.setEventsMask(SerialPort.MASK_RXCHAR);
-                port.addEventListener(this);
-            } catch (SerialPortException ex) {
-                throw new IOException("Cannot start firmata device", ex);
-            }
-        }
-    }
+	@Override
+	public void start() throws IOException {
+		if (!port.isOpened()) {
+			try {
+				port.openPort();
+				port.setParams(SerialPort.BAUDRATE_57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+						SerialPort.PARITY_NONE);
+				port.setEventsMask(SerialPort.MASK_RXCHAR);
+				port.addEventListener(this);
+			} catch (SerialPortException ex) {
+				throw new IOException("Cannot start firmata device", ex);
+			}
+		}
+	}
 
-    @Override
-    public void stop() throws IOException {
-        try {
-            if (port.isOpened()) {
-                port.purgePort(SerialPort.PURGE_RXCLEAR | SerialPort.PURGE_TXCLEAR);
-                port.closePort();
-            }
-        } catch (SerialPortException ex) {
-            throw new IOException("Cannot properly stop firmata device", ex);
-        }
-    }
+	@Override
+	public void stop() throws IOException {
+		try {
+			if (port.isOpened()) {
+				port.purgePort(SerialPort.PURGE_RXCLEAR | SerialPort.PURGE_TXCLEAR);
+				port.closePort();
+			}
+		} catch (SerialPortException ex) {
+			throw new IOException("Cannot properly stop firmata device", ex);
+		}
+	}
 
-    @Override
-    public void write(byte[] bytes) throws IOException {
-        try {
-            port.writeBytes(bytes);
-        } catch (SerialPortException ex) {
-            throw new IOException("Cannot send message to device", ex);
-        }
-    }
+	@Override
+	public void write(byte[] bytes) throws IOException {
+		try {
+			port.writeBytes(bytes);
+		} catch (SerialPortException ex) {
+			throw new IOException("Cannot send message to device", ex);
+		}
+	}
 
-    @Override
-    public void setParser(Parser parser) {
-        this.parser = parser;
-    }
+	@Override
+	public void setParser(Parser parser) {
+		this.parser = parser;
+	}
 
-    @Override
-    public void serialEvent(SerialPortEvent event) {
-        // queueing data from input buffer to processing by FSM logic
-        if (event.isRXCHAR() && event.getEventValue() > 0) {
-            try {
-                parser.parse(port.readBytes());
-            } catch (SerialPortException ex) {
-                LOGGER.error("Cannot read from device", ex);
-            }
-        }
-    }
+	@Override
+	public void serialEvent(SerialPortEvent event) {
+		// queueing data from input buffer to processing by FSM logic
+		if (event.isRXCHAR() && event.getEventValue() > 0) {
+			try {
+				parser.parse(port.readBytes());
+			} catch (SerialPortException ex) {
+				LOGGER.error("Cannot read from device", ex);
+			}
+		}
+	}
 }

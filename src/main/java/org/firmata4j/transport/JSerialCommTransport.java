@@ -38,52 +38,52 @@ import com.fazecast.jSerialComm.SerialPortEvent;
  */
 public class JSerialCommTransport implements TransportInterface {
 
-    private final SerialPort serialPort;
+	private final SerialPort serialPort;
 
-    private Parser parser;
+	private Parser parser;
 
-    public JSerialCommTransport(String portDescriptor) {
-        serialPort = SerialPort.getCommPort(portDescriptor);
-    }
+	public JSerialCommTransport(String portDescriptor) {
+		serialPort = SerialPort.getCommPort(portDescriptor);
+	}
 
-    @Override
-    public void start() throws IOException {
-        if (!serialPort.isOpen()) {
-            if (serialPort.openPort()) {
-                serialPort.setComPortParameters(57600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-                serialPort.addDataListener(new SerialPortDataListener() {
-                    @Override
-                    public void serialEvent(SerialPortEvent event) {
-                        if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
-                            parser.parse(event.getReceivedData());
-                        }
-                    }
+	@Override
+	public void start() throws IOException {
+		if (!serialPort.isOpen()) {
+			if (serialPort.openPort()) {
+				serialPort.setComPortParameters(57600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+				serialPort.addDataListener(new SerialPortDataListener() {
+					@Override
+					public void serialEvent(SerialPortEvent event) {
+						if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
+							parser.parse(event.getReceivedData());
+						}
+					}
 
-                    @Override
-                    public int getListeningEvents() {
-                        return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
-                    }
-                });
-            } else {
-                throw new IOException("Cannot start firmata device: port=" + serialPort);
-            }
-        }
-    }
+					@Override
+					public int getListeningEvents() {
+						return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
+					}
+				});
+			} else {
+				throw new IOException("Cannot start firmata device: port=" + serialPort);
+			}
+		}
+	}
 
-    @Override
-    public void stop() throws IOException {
-        if (serialPort.isOpen() && !serialPort.closePort()) {
-            throw new IOException("Cannot properly stop firmata device: port=" + serialPort);
-        }
-    }
+	@Override
+	public void stop() throws IOException {
+		if (serialPort.isOpen() && !serialPort.closePort()) {
+			throw new IOException("Cannot properly stop firmata device: port=" + serialPort);
+		}
+	}
 
-    @Override
-    public void write(byte[] bytes) throws IOException {
-        serialPort.writeBytes(bytes, bytes.length);
-    }
+	@Override
+	public void write(byte[] bytes) throws IOException {
+		serialPort.writeBytes(bytes, bytes.length);
+	}
 
-    @Override
-    public void setParser(Parser parser) {
-        this.parser = parser;
-    }
+	@Override
+	public void setParser(Parser parser) {
+		this.parser = parser;
+	}
 }
