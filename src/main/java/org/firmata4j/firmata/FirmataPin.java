@@ -180,6 +180,15 @@ public class FirmataPin implements Pin {
 	}
 
 	/**
+	 * Returns the number of event listeners registered for this pin.
+	 * 
+	 * @return the number of event listeners registered for this pin
+	 */
+	public int getEventListenersCount() {
+		return listeners.size();
+	}
+
+	/**
 	 * Adds supported mode to the pin.
 	 *
 	 * @param mode the mode

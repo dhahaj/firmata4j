@@ -59,6 +59,7 @@ public class SerialTransport implements TransportInterface {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SerialTransport.class);
 
 	/**
+	 * Constructor for automatically selecting the serial communication library.
 	 * 
 	 * @param portName
 	 */

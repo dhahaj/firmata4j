@@ -32,6 +32,9 @@ import org.firmata4j.transport.SerialTransport;
 import org.firmata4j.transport.TransportInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fazecast.jSerialComm.SerialPort;
+
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
@@ -89,6 +92,18 @@ public class FirmataDevice implements IODevice {
 	}
 
 	/**
+	 * Constructs FirmataDevice instance explicitly using a {@link SerialPort} instance
+	 * from jSerialComm library.
+	 * 
+	 * @see {@link SerialPort}
+	 * 
+	 * @param port the {@link SerialPort} that the device is connected to
+	 */
+	public FirmataDevice(SerialPort port) {
+		this(new SerialTransport(port));
+	}
+
+	/**
 	 * Constructs FirmataDevice instance that operates on default protocol using
 	 * specified transport.
 	 *
@@ -134,6 +149,10 @@ public class FirmataDevice implements IODevice {
 		parser = new FirmataParser(protocol);
 		transport.setParser(parser);
 		this.transport = transport;
+	}
+
+	public static FirmataDevice gFirmataDevice(SerialPort port) {
+		return null;
 	}
 
 	/**
@@ -225,6 +244,15 @@ public class FirmataDevice implements IODevice {
 	@Override
 	public void removeEventListener(IODeviceEventListener listener) {
 		listeners.remove(listener);
+	}
+
+	/**
+	 * Returns the number of listeners that are currently registered to this device.
+	 * 
+	 * @return the number of listeners
+	 */
+	public int getEventsListenersCount() {
+		return listeners.size();
 	}
 
 	@Override

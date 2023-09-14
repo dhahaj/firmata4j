@@ -24,6 +24,8 @@
 
 package org.firmata4j.fsm;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -69,14 +71,16 @@ public class FiniteStateMachine {
      *
      * @param stateClass the class of initial state of the FSM
      * @throws IllegalArgumentException when creating of the state instance is
-     * impossible (likely because of lack of the constructor taking the FSM as a
-     * parameter)
+     *                                  impossible (likely because of lack of the
+     *                                  constructor taking the FSM as a
+     *                                  parameter)
      */
     @SuppressWarnings("LeakingThisInConstructor")
     public FiniteStateMachine(Class<? extends State> stateClass) {
         this();
         try {
-            // LeakingThisInConstructor is suppresed since the state instance doesn't run its own thread
+            // LeakingThisInConstructor is suppresed since the state instance doesn't run
+            // its own thread
             currentState = stateClass.getConstructor(FiniteStateMachine.class).newInstance(this);
         } catch (ReflectiveOperationException ex) {
             throw new IllegalArgumentException("Cannot instantiate the initial state", ex);
@@ -109,8 +113,10 @@ public class FiniteStateMachine {
      *
      * @param stateClass the state class
      * @throws IllegalArgumentException when the state class does not provide a
-     * constructor taking {@link FiniteStateMachine} instance as a single
-     * parameter.
+     *                                  constructor taking
+     *                                  {@link FiniteStateMachine} instance as a
+     *                                  single
+     *                                  parameter.
      */
     public void transitTo(Class<? extends State> stateClass) {
         try {
@@ -171,7 +177,7 @@ public class FiniteStateMachine {
             process(buffer[i]);
         }
     }
-    
+
     /**
      * Adds a handler for specified event type.
      *
@@ -179,7 +185,7 @@ public class FiniteStateMachine {
      * gets added to the end of handler chain.
      *
      * @param eventType type of event the handler is supposed to deal with
-     * @param handler an object that gets an event to process
+     * @param handler   an object that gets an event to process
      */
     public synchronized void addHandler(String eventType, Consumer<Event> handler) {
         if (handlers.containsKey(eventType)) {
@@ -187,6 +193,24 @@ public class FiniteStateMachine {
         } else {
             handlers.put(eventType, handler);
         }
+    }
+
+    /**
+     * Returns the number of handlers registered for the specified event type.
+     * 
+     * @return the number of handlers registered for the specified event type
+     */
+    public int getHandlersCount() {
+        return handlers.size();
+    }
+
+    /**
+     * Returns the list of event types for which there are registered handlers.
+     *
+     * @return the list of event types for which there are registered handlers
+     */
+    public List<String> getHandlers() {
+        return new ArrayList<>(handlers.keySet());
     }
 
     /**
@@ -201,8 +225,7 @@ public class FiniteStateMachine {
             LOGGER.warn(
                     "No specific event handler is registered for {}:{}.",
                     event.getType(),
-                    event.getBody()
-            );
+                    event.getBody());
         } else {
             eventHandlingExecutor.execute(new Runnable() {
                 @Override
