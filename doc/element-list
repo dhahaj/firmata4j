@@ -1,0 +1,8 @@
+org.firmata4j
+org.firmata4j.firmata
+org.firmata4j.firmata.fsm
+org.firmata4j.firmata.parser
+org.firmata4j.fsm
+org.firmata4j.ssd1306
+org.firmata4j.transport
+org.firmata4j.ui
