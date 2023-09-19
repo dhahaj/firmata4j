@@ -44,11 +44,11 @@ public class ParsingI2CMessageState extends AbstractState {
     /*
      * /* I2C reply
      * -------------------------------
-     * 0  START_SYSEX (0xF0) (MIDI System Exclusive)
-     * 1  I2C_REPLY (0x77)
-     * 2  slave address (LSB)
+     * 0 START_SYSEX (0xF0) (MIDI System Exclusive)
+     * 1 I2C_REPLY (0x77)
+     * 2 slave address (LSB)
      * ... Lotsa Bytes
-     * n  END_SYSEX (0xF7)
+     * n END_SYSEX (0xF7)
      */
     /**
      * Collects I2C message from individual bytes.
@@ -75,7 +75,7 @@ public class ParsingI2CMessageState extends AbstractState {
     }
 
     private static byte[] convertI2CBuffer(byte[] byteBuffer) {
-        int outSize = new Double(Math.floor(byteBuffer.length / 2)).intValue();
+        int outSize = Double.valueOf(Math.floor(byteBuffer.length / 2)).intValue();
         byte[] outBuffer = new byte[outSize];
         int outIndex = 0;
         for (int index = 0; index < byteBuffer.length; index = index + 2) {
