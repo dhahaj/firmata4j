@@ -7,6 +7,9 @@ import com.fazecast.jSerialComm.SerialPort;
 
 /**
  * Convenience class to get a list of available serial ports.
+ * 
+ * @see SerialPort
+ * @author Daniel Hahaj &lt;dhahaj@gmail.com&gt;
  */
 public class SerialPortList {
 

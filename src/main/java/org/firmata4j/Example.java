@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -43,9 +42,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import com.fazecast.jSerialComm.SerialPort;
+import com.formdev.flatlaf.intellijthemes.FlatHiberbeeDarkIJTheme;
+
 import org.firmata4j.ui.JPinboard;
 
 /**
@@ -58,12 +57,15 @@ public class Example {
 	private static final JFrame INITIALIZATION_FRAME = new JFrame();
 
 	public static void main(String[] args) throws IOException {
-		try { // set look and feel
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException ex) {
-			Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
-		}
+
+		FlatHiberbeeDarkIJTheme.setup();
+
+		// try { // set look and feel
+		// 	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+		// 		| UnsupportedLookAndFeelException ex) {
+		// 	Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
+		// }
 
 		// requesting a user to define the port name
 		String port = requestPort();

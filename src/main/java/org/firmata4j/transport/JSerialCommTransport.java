@@ -34,7 +34,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 /**
  * Implementation of {@link TransportInterface} based on {@link SerialPort}.
  *
- * @author Norbert Sándor
+ * @author Daniel Hahaj &lt;dhahaj@gmail.com&gt;
  */
 public class JSerialCommTransport implements TransportInterface {
 

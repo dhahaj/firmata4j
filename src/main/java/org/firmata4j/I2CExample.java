@@ -46,12 +46,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import jssc.SerialNativeInterface;
-import jssc.SerialPortList;
 import org.firmata4j.firmata.FirmataDevice;
 import org.firmata4j.ssd1306.SSD1306;
+
+import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
+import com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme;
+
 import org.firmata4j.ssd1306.MonochromeCanvas;
 
 /**
@@ -64,29 +64,38 @@ public class I2CExample {
     private static final JFrame INITIALIZATION_FRAME = new JFrame();
 
     public static void main(String[] args) throws IOException {
-        try { // set look and feel
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(I2CExample.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
-        }
+
+
+        FlatMaterialDesignDarkIJTheme.setup();
+
         // requesting a user to define the port name
         String port = requestPort();
         final IODevice device = new FirmataDevice(port);
         showInitializationMessage();
-        device.start();
+
+        
         try {
+            device.start();
             device.ensureInitializationIsDone();
-        } catch (InterruptedException e) {
-            JOptionPane.showMessageDialog(INITIALIZATION_FRAME, e.getMessage(), "Connection error", JOptionPane.ERROR_MESSAGE);
+        } catch (InterruptedException | IOException e) {
+            JOptionPane.showMessageDialog(INITIALIZATION_FRAME, e.getMessage(), "Connection error",
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+
         I2CDevice i2cDevice = device.getI2CDevice((byte) 0x3C);
         SSD1306.Size size = requestSize();
+
         final SSD1306 display = new SSD1306(i2cDevice, size);
+
         display.init();
+
         int x = (size.width - 75) / 2;
         int y = (size.height - 16) / 2;
-        display.getCanvas().drawImage(x, y, ImageIO.read(I2CExample.class.getResource("/img/firmata4j.png")), true, true);
+
+        display.getCanvas().drawImage(x, y, ImageIO.read(I2CExample.class.getResource("/img/firmata4j.png")), true,
+                true);
+
         display.display();
         hideInitializationWindow();
         SwingUtilities.invokeLater(new Runnable() {
@@ -165,6 +174,8 @@ public class I2CExample {
 
                 mainFrame.pack();
                 mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                mainFrame.setLocationRelativeTo(null);
+                mainFrame.setSize(mainFrame.getWidth() + 100, mainFrame.getHeight() + 100);
                 mainFrame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
@@ -184,14 +195,17 @@ public class I2CExample {
 
     @SuppressWarnings("unchecked")
     private static String requestPort() {
+        FlatArcOrangeIJTheme.setup();
         JComboBox<String> portNameSelector = new JComboBox<>();
         portNameSelector.setModel(new DefaultComboBoxModel<String>());
         String[] portNames;
-        if (SerialNativeInterface.getOsType() == SerialNativeInterface.OS_MAC_OS_X) {
-            // for MAC OS default pattern of jssc library is too restrictive
-            portNames = SerialPortList.getPortNames("/dev/", Pattern.compile("tty\\..*"));
+        String OS = System.getProperty("os.name").toLowerCase();
+        if (OS.indexOf("mac") >= 0) {
+            // Not supported
+            throw new RuntimeException("Mac OS is not supported");
         } else {
-            portNames = SerialPortList.getPortNames();
+            java.util.List<String> ports = SerialPortList.getPortList();
+            portNames = ports.toArray(new String[ports.size()]);
         }
         for (String portName : portNames) {
             portNameSelector.addItem(portName);
@@ -204,7 +218,8 @@ public class I2CExample {
         panel.setLayout(new GridBagLayout());
         panel.add(new JLabel("Port "));
         panel.add(portNameSelector);
-        if (JOptionPane.showConfirmDialog(null, panel, "Select the port", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, panel, "Select the port",
+                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
             return portNameSelector.getSelectedItem().toString();
         } else {
             System.exit(0);
@@ -222,7 +237,8 @@ public class I2CExample {
         panel.setLayout(new GridBagLayout());
         panel.add(new JLabel("Size "));
         panel.add(sizeSelector);
-        if (JOptionPane.showConfirmDialog(null, panel, "Select size of display", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(null, panel, "Select size of display",
+                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
             return (SSD1306.Size) sizeSelector.getSelectedItem();
         } else {
             System.exit(0);
@@ -235,13 +251,16 @@ public class I2CExample {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
+                    FlatMaterialDesignDarkIJTheme.installLafInfo();
+                    FlatMaterialDesignDarkIJTheme.setup();
                     JFrame frame = INITIALIZATION_FRAME;
+                    JFrame.setDefaultLookAndFeelDecorated(false);
                     frame.setUndecorated(true);
                     JLabel label = new JLabel("Connecting to device");
                     label.setHorizontalAlignment(JLabel.CENTER);
                     frame.add(label);
                     frame.pack();
-                    frame.setSize(frame.getWidth() + 40, frame.getHeight() + 40);
+                    frame.setSize(frame.getWidth() + 120, frame.getHeight() + 120);
                     Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
                     int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
                     int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
@@ -325,7 +344,7 @@ public class I2CExample {
             ssd1306.display();
         }
     }
-    
+
     private static void drawCircle(SSD1306 ssd1306) {
         ssd1306.clear();
         MonochromeCanvas display = ssd1306.getCanvas();
