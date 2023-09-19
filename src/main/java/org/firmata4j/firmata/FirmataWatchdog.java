@@ -88,10 +88,18 @@ public class FirmataWatchdog extends Consumer<Event> {
         lastTimestamp = evt.getTimestamp();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isActive() {
         return active.get();
     }
 
+    /**
+     *
+     * @param active
+     */
     public void setActive(boolean active) {
         if (active) {
             enable();
@@ -100,12 +108,18 @@ public class FirmataWatchdog extends Consumer<Event> {
         }
     }
 
+    /**
+     *
+     */
     public void enable() {
         if (!active.getAndSet(true)) {
             EXECUTOR.schedule(watch, timeout, UNIT);
         }
     }
 
+    /**
+     *
+     */
     public void disable() {
         active.set(false);
     }

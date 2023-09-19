@@ -41,6 +41,9 @@ import org.firmata4j.I2CListener;
  */
 public class FirmataI2CDevice implements I2CDevice {
 
+    /**
+     *
+     */
     public static final int REGISTER_NOT_SET = -1;
 
     private final FirmataDevice masterDevice;
@@ -138,6 +141,10 @@ public class FirmataI2CDevice implements I2CDevice {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return String.format("FirmataI2CDevice [address=0x%02X]", address);

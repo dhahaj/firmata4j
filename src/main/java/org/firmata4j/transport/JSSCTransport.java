@@ -44,7 +44,12 @@ public class JSSCTransport implements TransportInterface, SerialPortEventListene
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JSSCTransport.class);
 
-	public JSSCTransport(String portName) throws Exception {
+    /**
+     *
+     * @param portName
+     * @throws Exception
+     */
+    public JSSCTransport(String portName) throws Exception {
 		this.port = new SerialPort(portName);
 		throw new Exception("using jssc!");
 	}
@@ -90,7 +95,11 @@ public class JSSCTransport implements TransportInterface, SerialPortEventListene
 		this.parser = parser;
 	}
 
-	@Override
+    /**
+     *
+     * @param event
+     */
+    @Override
 	public void serialEvent(SerialPortEvent event) {
 		// queueing data from input buffer to processing by FSM logic
 		if (event.isRXCHAR() && event.getEventValue() > 0) {

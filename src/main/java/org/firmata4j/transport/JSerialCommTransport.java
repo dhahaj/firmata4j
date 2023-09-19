@@ -42,7 +42,11 @@ public class JSerialCommTransport implements TransportInterface {
 
 	private Parser parser;
 
-	public JSerialCommTransport(String portDescriptor) {
+    /**
+     *
+     * @param portDescriptor
+     */
+    public JSerialCommTransport(String portDescriptor) {
 		serialPort = SerialPort.getCommPort(portDescriptor);
 	}
 

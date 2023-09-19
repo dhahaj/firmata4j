@@ -25,11 +25,7 @@
 package org.firmata4j.firmata;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.*;
 import org.firmata4j.IOEvent;
 import org.firmata4j.Pin;
 import org.firmata4j.PinEventListener;
@@ -79,7 +75,13 @@ public class FirmataPin implements Pin {
 		setMode(mode, 544, 2400); // Arduino defaults (https://www.arduino.cc/en/Reference/ServoAttach)
 	}
 
-	@Override
+    /**
+     *
+     * @param minPulse
+     * @param maxPulse
+     * @throws IOException
+     */
+    @Override
 	public void setServoMode(int minPulse, int maxPulse) throws IOException {
 		setMode(Mode.SERVO, minPulse, maxPulse);
 	}

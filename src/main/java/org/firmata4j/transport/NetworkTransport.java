@@ -70,6 +70,11 @@ public class NetworkTransport implements TransportInterface {
         this.port = Integer.valueOf(parts[1]);
     }
     
+    /**
+     *
+     * @param ip
+     * @param port
+     */
     public NetworkTransport(InetAddress ip, int port) {
         this.ip = ip;
         this.port = port;

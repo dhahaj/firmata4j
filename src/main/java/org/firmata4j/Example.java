@@ -42,6 +42,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import com.fazecast.jSerialComm.SerialPort;
 import com.formdev.flatlaf.intellijthemes.FlatHiberbeeDarkIJTheme;
 
@@ -58,14 +61,12 @@ public class Example {
 
 	public static void main(String[] args) throws IOException {
 
-		FlatHiberbeeDarkIJTheme.setup();
-
-		// try { // set look and feel
-		// 	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-		// 		| UnsupportedLookAndFeelException ex) {
-		// 	Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
-		// }
+		try { // set look and feel
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException ex) {
+			Logger.getLogger(Example.class.getName()).log(Level.SEVERE, "Cannot load system look and feel.", ex);
+		}
 
 		// requesting a user to define the port name
 		String port = requestPort();

@@ -74,6 +74,7 @@ public class Event {
 
     /**
      * Returns the type of the event.
+     * @return 
      */
     public String getType() {
         return type;
@@ -81,6 +82,7 @@ public class Event {
 
     /**
      * Returns the timestamp of the event.
+     * @return 
      */
     public long getTimestamp() {
         return timestamp;
@@ -88,6 +90,7 @@ public class Event {
 
     /**
      * Returns the body of the event.
+     * @return 
      */
     public Map<String, Object> getBody() {
         return new HashMap<>(body);

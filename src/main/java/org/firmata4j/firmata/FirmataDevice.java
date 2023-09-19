@@ -23,8 +23,17 @@
  */
 package org.firmata4j.firmata;
 
+import com.fazecast.jSerialComm.SerialPort;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.firmata4j.*;
+import static org.firmata4j.firmata.parser.FirmataEventType.*;
 import org.firmata4j.firmata.parser.FirmataParser;
+import static org.firmata4j.firmata.parser.FirmataToken.*;
 import org.firmata4j.firmata.parser.WaitingForMessageState;
 import org.firmata4j.fsm.Event;
 import org.firmata4j.fsm.FiniteStateMachine;
@@ -32,29 +41,6 @@ import org.firmata4j.transport.SerialTransport;
 import org.firmata4j.transport.TransportInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fazecast.jSerialComm.SerialPort;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import static org.firmata4j.firmata.parser.FirmataEventType.*;
-import static org.firmata4j.firmata.parser.FirmataToken.*;
 
 /**
  * Implements {@link IODevice} that is using Firmata protocol.
@@ -151,7 +137,12 @@ public class FirmataDevice implements IODevice {
 		this.transport = transport;
 	}
 
-	public static FirmataDevice gFirmataDevice(SerialPort port) {
+    /**
+     *
+     * @param port
+     * @return
+     */
+    public static FirmataDevice gFirmataDevice(SerialPort port) {
 		return null;
 	}
 

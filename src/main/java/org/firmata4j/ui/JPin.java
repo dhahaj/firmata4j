@@ -89,7 +89,11 @@ public class JPin extends JLabel implements PinEventListener {
 		DISABLED_OFF = new ImageIcon(classLoader.getResource("img/gray-off.png"));
 	}
 
-	public JPin(Pin pin) {
+    /**
+     *
+     * @param pin
+     */
+    public JPin(Pin pin) {
 		setHorizontalAlignment(JLabel.CENTER);
 		modesMenu = new JPopupMenu(String.valueOf(pin.getIndex()));
 		setModel(pin);
@@ -135,7 +139,11 @@ public class JPin extends JLabel implements PinEventListener {
 		SwingUtilities.invokeLater(refreshRoutine);
 	}
 
-	public final void setModel(final Pin model) {
+    /**
+     *
+     * @param model
+     */
+    public final void setModel(final Pin model) {
 		if (this.model != null) {
 			this.model.removeEventListener(this);
 			modesMenu.removeAll();

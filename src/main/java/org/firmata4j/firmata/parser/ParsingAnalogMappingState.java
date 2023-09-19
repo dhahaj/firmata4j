@@ -24,14 +24,13 @@
 
 package org.firmata4j.firmata.parser;
 
-import org.firmata4j.fsm.Event;
-import org.firmata4j.fsm.AbstractState;
-import org.firmata4j.fsm.FiniteStateMachine;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import static org.firmata4j.firmata.parser.FirmataEventType.*;
 import static org.firmata4j.firmata.parser.FirmataToken.*;
+import org.firmata4j.fsm.AbstractState;
+import org.firmata4j.fsm.Event;
+import org.firmata4j.fsm.FiniteStateMachine;
 
 /**
  * This state parses analog mapping message and fires an event that contains
@@ -46,6 +45,10 @@ public class ParsingAnalogMappingState extends AbstractState {
     private int portId;
     private final Map<Integer, Integer> mapping = new ConcurrentHashMap<>();
 
+    /**
+     *
+     * @param fsm
+     */
     public ParsingAnalogMappingState(FiniteStateMachine fsm) {
         super(fsm);
     }

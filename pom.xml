@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.kurbatov</groupId>
+    <groupId>com.github.dhahaj</groupId>
     <artifactId>firmata4j</artifactId>
-    <version>2.3.9-SNAPSHOT</version>
+    <version>2.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>firmata4j</name>
     <description>firmata4j is a client library of Firmata.</description>
-    <url>https://github.com/kurbatov/firmata4j</url>
+    <url>https://github.com/dhahaj/firmata4j</url>
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://raw.github.com/kurbatov/firmata4j/master/LICENSE</url>
+            <url>https://raw.github.com/dhahaj/firmata4j/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
     <developers>
         <developer>
-            <name>Oleg Kurbatov</name>
-            <email>o.v.kurbatov@gmail.com</email>
-            <url>https://github.com/kurbatov</url>
+            <name>Daniel Hahaj</name>
+            <email>dhahaj@gmail.com</email>
+            <url>https://github.com/dhahaj</url>
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/kurbatov/firmata4j</url>
-        <connection>scm:git:git@github.com:kurbatov/firmata4j.git</connection>
-        <developerConnection>scm:git:git@github.com:kurbatov/firmata4j.git</developerConnection>
+        <url>https://github.com/dhahaj/firmata4j</url>
+        <connection>scm:git:git@github.com:dhahaj/firmata4j.git</connection>
+        <developerConnection>scm:git:git@github.com:dhahaj/firmata4j.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     

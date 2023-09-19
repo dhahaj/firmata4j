@@ -41,7 +41,11 @@ public class JPinboard extends JPanel {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JPinboard.class);
 
-	public JPinboard(IODevice model) {
+    /**
+     *
+     * @param model
+     */
+    public JPinboard(IODevice model) {
 		GridBagLayout layout = new GridBagLayout();
 
 		setLayout(layout);

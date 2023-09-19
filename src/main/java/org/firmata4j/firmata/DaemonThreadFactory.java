@@ -47,7 +47,12 @@ public class DaemonThreadFactory implements ThreadFactory {
 		this.namePrefix = namePrefix;
 	}
 
-	@Override
+    /**
+     *
+     * @param r
+     * @return
+     */
+    @Override
 	public Thread newThread(Runnable r) {
 		Thread result = new Thread(r, String.format("%s-%d", namePrefix, counter.incrementAndGet()));
 		result.setDaemon(true);

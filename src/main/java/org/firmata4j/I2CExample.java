@@ -24,35 +24,17 @@
 
 package org.firmata4j;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import org.firmata4j.firmata.FirmataDevice;
-import org.firmata4j.ssd1306.SSD1306;
-
-import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
-import com.formdev.flatlaf.intellijthemes.FlatMaterialDesignDarkIJTheme;
-
 import org.firmata4j.ssd1306.MonochromeCanvas;
+import org.firmata4j.ssd1306.SSD1306;
 
 /**
  * Example of usage of an i2c device.
@@ -65,8 +47,6 @@ public class I2CExample {
 
     public static void main(String[] args) throws IOException {
 
-
-        FlatMaterialDesignDarkIJTheme.setup();
 
         // requesting a user to define the port name
         String port = requestPort();
@@ -195,7 +175,6 @@ public class I2CExample {
 
     @SuppressWarnings("unchecked")
     private static String requestPort() {
-        FlatArcOrangeIJTheme.setup();
         JComboBox<String> portNameSelector = new JComboBox<>();
         portNameSelector.setModel(new DefaultComboBoxModel<String>());
         String[] portNames;
@@ -251,8 +230,6 @@ public class I2CExample {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    FlatMaterialDesignDarkIJTheme.installLafInfo();
-                    FlatMaterialDesignDarkIJTheme.setup();
                     JFrame frame = INITIALIZATION_FRAME;
                     JFrame.setDefaultLookAndFeelDecorated(false);
                     frame.setUndecorated(true);
